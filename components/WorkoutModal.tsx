@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Dialog,
   DialogContent,
@@ -9,50 +7,57 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { WorkoutModalProps } from "@/types/WorkoutModalProps";
+
+type Exercise = {
+  id: string;
+  name: string;
+  sets_reps: string;
+  video_url: string;
+  notes?: string;
+};
 
 export default function WorkoutModal({
   title,
   description,
-  video_url,
-}: WorkoutModalProps) {
-  // Extract YouTube video ID for embed
-  const getVideoId = (url: string) => {
-    const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-    return match ? match[1] : null;
-  };
-
-  const videoId = getVideoId(video_url);
-
-  
+  exercises,
+}: {
+  title: string;
+  description: string;
+  exercises: Exercise[];
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">Ver vídeo</Button>
+        <Button variant="outline" size="sm">
+          Ver treino completo
+        </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[720px]">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        {videoId ? (
-          <div className="aspect-video mt-4">
-            <iframe
-              className="rounded w-full h-full"
-              src={`https://www.youtube.com/embed/${videoId}`}
-              title="Vídeo do treino"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
-        ) : (
-          <p className="text-red-500 text-sm">URL do vídeo inválida.</p>
-        )}
+        <ul className="space-y-4 mt-4">
+          {exercises.map((ex) => (
+            <li key={ex.id} className="border rounded p-3">
+              <p className="font-semibold">{ex.name}</p>
+              <p className="text-sm text-muted-foreground">{ex.sets_reps}</p>
+              {ex.video_url && (
+                <a
+                  href={ex.video_url}
+                  target="_blank"
+                  className="text-blue-600 text-sm underline"
+                >
+                  Ver vídeo
+                </a>
+              )}
+              {ex.notes && <p className="text-sm mt-1">{ex.notes}</p>}
+            </li>
+          ))}
+        </ul>
       </DialogContent>
     </Dialog>
   );
 }
-

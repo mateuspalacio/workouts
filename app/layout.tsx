@@ -7,6 +7,7 @@ import { GTM_ID } from "@/lib/gtm";
 import { SidebarProvider } from "@/context/SidebarContext";
 import LayoutShell from "@/components/LayoutShell";
 import { dark } from "@clerk/themes";
+import { ptBR } from '@clerk/localizations'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
+    <ClerkProvider localization={ptBR} appearance={{ baseTheme: dark }}>
       <html lang="en">
       <head>
         {/* GTM Script */}
