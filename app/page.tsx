@@ -3,19 +3,23 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Benefits from "@/components/Benefits";
 import AboutAlexandre from "@/components/AboutAlexandre";
+import OurProduct from "@/components/OurProduct";
 
 export default function HomePage() {
   return (
     <main className="space-y-0">
       {/* HERO */}
-      <section className="py-24 bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white">
-        <div className="max-w-3xl px-6 mx-auto">
+      <section className="py-10 bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white">
+        <div className="max-w-3xl px-6 py-2 mx-auto">
           <HomeHero />
         </div>
       </section>
 
+        <div className="py-2 mx-auto">
+          <OurProduct/>
+          </div>
       {/* VIDEO PREVIEW */}
-      <section className="py-24 bg-background text-foreground">
+      <section className="py-10 bg-background text-foreground">
         <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
           <h2 className="text-2xl font-bold">Veja como funciona</h2>
           <p className="text-muted-foreground">
