@@ -7,6 +7,7 @@ import {
   SignedOut,
   SignInButton,
   UserButton,
+  useUser,
 } from '@clerk/nextjs';
 import { useState } from 'react';
 import Image from 'next/image';
@@ -20,6 +21,8 @@ export default function Navbar() {
     const pathname = usePathname();
     const isPremium = usePremium();
 
+  const { user } = useUser();
+  const isAdminUser = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
   const [loading, setLoading] = useState(false);
 const [open, setOpen] = useState(false);
 
@@ -39,9 +42,9 @@ const [open, setOpen] = useState(false);
   };
 
   return (
-    <nav className="bg-white border-b px-4 py-2 sticky top-0 z-10">
+    <nav className="bg-blue px-4 py-2 sticky top-0 z-10">
        {/* Mobile: Logo + Sidebar Trigger */}
-  <div className="sm:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b px-4 py-2 flex items-center justify-between">
+  <div className="sm:hidden fixed top-0 left-0 right-0 z-40 px-4 py-2 flex items-center justify-between">
     
 
     <Sheet open={open} onOpenChange={setOpen}>
@@ -112,7 +115,7 @@ const [open, setOpen] = useState(false);
   </div>
 
   {/* Desktop: Full Navbar */}
-  <div className="hidden sm:flex bg-white border-b px-4 py-2 sticky top-0 z-30 w-full justify-between items-center">
+  <div className="hidden sm:flex px-4 py-2 sticky top-0 z-30 w-full justify-between items-center">
     <Link href="/">
       <Image src="/logo.png" alt="Logo" width={150} height={40} hidden />
     </Link>
@@ -157,8 +160,8 @@ const [open, setOpen] = useState(false);
 }) {
   return (
     <nav className="flex flex-col gap-2">
-      {links.map(({ name, href, icon: Icon }) => (
-        <Link key={href} href={href} onClick={closeSidebar}>
+      {links.map(({ name, href, icon: Icon, isAdmin }) => (
+        <Link key={href} href={href} onClick={closeSidebar} hidden={isAdmin ? isAdmin != isAdminUser ! : false}>
           <Button
             variant={pathname === href ? 'secondary' : 'ghost'}
             className="justify-start w-full font-normal"

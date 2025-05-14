@@ -1,18 +1,35 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function PrivacyPage() {
-    return (
-      <div className="max-w-3xl mx-auto px-6 py-16 space-y-6">
-        <h1 className="text-3xl font-bold">Privacy Policy</h1>
-        <p className="text-muted-foreground">
-          We value your privacy. This application only stores the data required for your account and billing management.
-        </p>
-        <p>
-          We do not sell your data, and your content is never reused, shared, or used for training AI models.
-        </p>
-        <p>
-          All API requests are made securely. If you have questions or concerns about how your data is used, reach out to us at{' '}
-          <a href="mailto:hey@writefluxai.com" className="underline">hey@writefluxai.com</a>.
-        </p>
-      </div>
-    );
-  }
-  
+  return (
+    <motion.main
+      className="max-w-3xl mx-auto px-6 py-24 space-y-8 text-foreground"
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h1 className="text-3xl font-bold">Política de Privacidade</h1>
+
+      <p className="text-muted-foreground">
+        Nós valorizamos a sua privacidade. Este aplicativo armazena apenas os dados necessários para
+        o gerenciamento da sua conta e assinatura.
+      </p>
+
+      <p>
+        Nunca vendemos seus dados. Seus treinos e informações pessoais não são reutilizados, nem
+        compartilhados com terceiros, nem usados para treinar modelos de inteligência artificial.
+      </p>
+
+      <p>
+        Todas as requisições são feitas de forma segura e criptografada. Se você tiver dúvidas ou
+        preocupações sobre o uso dos seus dados, entre em contato conosco em:{' '}
+        <a href="mailto:suporte@seutreino.app" className="underline">
+          suporte@seutreino.app
+        </a>
+        .
+      </p>
+    </motion.main>
+  );
+}

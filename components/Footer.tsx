@@ -11,13 +11,18 @@ export default function Footer() {
             Contato: <a href="mailto:hey@writefluxai.com" className="hover:underline">hey@writefluxai.com</a>
           </p>
         </div>
-
+<p>
+          Plataforma de treino online com planos mensais, vídeos explicativos e personal trainer
+          profissional. Ideal para quem quer treinar com método e regularidade.
+        </p>
+        <p>
+          Palavras-chave: treino musculação online, treino para academia Brasil, personal trainer,
+          treino gratuito, plano de treino mensal.
+        </p>
         {/* Right side links */}
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link href="/" className="hover:underline underline-offset-4">Home</Link>
-          <Link href="/precos" className="hover:underline underline-offset-4">Planos</Link>
-          <Link href="/privacidade" className="hover:underline underline-offset-4">Privacy</Link>
-          <Link href="/termos" className="hover:underline underline-offset-4">Terms</Link>
+          <Link href="/privacidade" className="hover:underline underline-offset-4">Privacidade</Link>
+          <Link href="/termos" className="hover:underline underline-offset-4">Termos</Link>
         </div>
       </div>
     </footer>

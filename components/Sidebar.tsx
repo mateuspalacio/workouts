@@ -8,6 +8,7 @@ import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/context/SidebarContext';
 import { links } from '@/lib/links';
+import { useUser } from '@clerk/nextjs';
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -63,12 +64,15 @@ function SidebarLinks({
   pathname: string;
   collapsed: boolean;
 }) {
+  
+  const { user } = useUser();
+  const isAdminUser = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
   return (
     <nav className="flex flex-col gap-2">
-      {links.map(({ name, href, icon: Icon }) => (
-        <Link key={href} href={href}>
+      {links.map(({ name, href, icon: Icon, isAdmin }) => (
+        <Link key={href} href={href} hidden={isAdmin ? isAdmin != isAdminUser ! : false}>
           <Button
-            variant={pathname === href ? 'secondary' : 'ghost'}
+            variant={pathname === href ? 'default' : 'ghost'}
             className={cn(
               'justify-start w-full font-normal transition-all transition-opacity duration-300 ease-in-out opacity-90 hover:opacity-100',
               collapsed ? 'px-2' : 'px-3',

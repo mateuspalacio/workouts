@@ -9,30 +9,7 @@ import { Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-
-type ExerciseTemplate = {
-  id: string;
-  name: string;
-  sets_reps: string;
-  video_url: string;
-  notes?: string;
-};
-
-type Exercise = {
-  name: string;
-  sets_reps: string;
-  video_url: string;
-  notes?: string;
-};
-
-type Workout = {
-  title: string;
-  description: string;
-  is_free: boolean;
-  month: string;
-  tag?: string;
-  exercises: Exercise[];
-};
+import { Exercise, ExerciseTemplate, Workout } from "@/types/Workout";
 
 export default function AdminWorkoutBuilder() {
   const [templates, setTemplates] = useState<ExerciseTemplate[]>([]);
@@ -45,6 +22,7 @@ export default function AdminWorkoutBuilder() {
     description: "",
     is_free: true,
     month: new Date().toISOString().slice(0, 7),
+  release_at: "",
   });
 
   const [exerciseForm, setExerciseForm] = useState<Exercise>({
@@ -131,6 +109,7 @@ export default function AdminWorkoutBuilder() {
           description: workout.description,
           is_free: workout.is_free,
           month: new Date(`${workout.month}-01`),
+            release_at: workout.release_at ? new Date(workout.release_at) : null,
         })
         .select("id")
         .single();
@@ -205,6 +184,21 @@ if (!isLoaded || !isAdmin) return null;
               onChange={(e) => setCurrentWorkout({ ...currentWorkout, month: e.target.value })}
             />
           </div>
+          <div>
+  <Label htmlFor="release_at">Liberar em</Label>
+  <Input
+    id="release_at"
+    type="datetime-local"
+    value={currentWorkout.release_at || ""}
+    onChange={(e) =>
+      setCurrentWorkout({
+        ...currentWorkout,
+        release_at: e.target.value,
+      })
+    }
+  />
+</div>
+
           <div>
   <Label htmlFor="tag">Categoria</Label>
   <select

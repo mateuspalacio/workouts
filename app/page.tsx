@@ -1,58 +1,127 @@
-// app/page.tsx
-import { Button } from "@/components/ui/button";
+import HomeHero from "@/components/HomeHero";
 import { Card, CardContent } from "@/components/ui/card";
-import Link from "next/link";
+import Image from "next/image";
+import Benefits from "@/components/Benefits";
+import AboutAlexandre from "@/components/AboutAlexandre";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex flex-col items-center px-4">
-      {/* Hero Section */}
-      <section className="w-full max-w-4xl text-center py-20">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Treinos de academia direto no seu celular
-        </h1>
-        <p className="text-lg text-muted-foreground mb-6">
-          Receba treinos de musculação todo mês com vídeos explicativos, feitos por um treinador com mais de 30 anos de experiência.
-        </p>
-        <Link href="/sign-up">
-          <Button size="lg">Comece agora de graça</Button>
-        </Link>
+    <main className="space-y-0">
+      {/* HERO */}
+      <section className="py-24 bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white">
+        <div className="max-w-3xl px-6 mx-auto">
+          <HomeHero />
+        </div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full max-w-5xl py-16 grid gap-8 md:grid-cols-3">
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-2">Treinos gratuitos</h2>
-            <p className="text-sm text-muted-foreground">
-              Acesse 4 treinos todo mês sem pagar nada.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-2">Plano PRO</h2>
-            <p className="text-sm text-muted-foreground">
-              Desbloqueie 20 treinos mensais e marque como concluído.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold mb-2">Vídeos exclusivos</h2>
-            <p className="text-sm text-muted-foreground">
-              Assista vídeos privados no YouTube com instruções detalhadas.
-            </p>
-          </CardContent>
-        </Card>
+      {/* VIDEO PREVIEW */}
+      <section className="py-24 bg-background text-foreground">
+        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
+          <h2 className="text-2xl font-bold">Veja como funciona</h2>
+          <p className="text-muted-foreground">
+            Cada treino vem com vídeo. Alexandre mostra como fazer com técnica e segurança, não importa o exercício.
+          </p>
+          <div className="aspect-video rounded overflow-hidden shadow-lg border">
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1&showinfo=0"
+              className="w-full h-full"
+              frameBorder="0"
+              allowFullScreen
+              title="Demonstração de treino"
+            />
+          </div>
+        </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="text-center py-16">
-        <h3 className="text-2xl font-semibold mb-4">Pronto pra treinar com propósito?</h3>
-        <Link href="/sign-up">
-          <Button size="lg">Criar minha conta</Button>
-        </Link>
+      {/* ABOUT */}
+      <section className="py-24 bg-muted/10 text-foreground">
+        <div className="max-w-5xl px-6 mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <Image
+            src="/pt-foto.jpg"
+            width={200}
+            height={100}
+            alt="Personal Trainer"
+            className="rounded-xl shadow-xl object-cover w-full max-h-[400px]"
+          />
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Alexandre Melo</h2>
+            <p className="text-muted-foreground text-base">
+              Personal trainer com quase 30 anos de experiência, referência em Fortaleza. Alexandre já
+              ajudou centenas de pessoas a treinarem com consistência e resultado.
+            </p>
+            <ul className="list-disc pl-5 text-muted-foreground text-sm">
+              <li>Treinador recomendado por profissionais da saúde em Fortaleza</li>
+              <li>Experiência em academias, CrossFit, reabilitação e alto rendimento</li>
+              <li>Treinos práticos, diretos e com execução segura</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* BENEFITS + WHY US */}
+      <section className="py-24 bg-background text-foreground">
+        <div className="max-w-5xl px-6 mx-auto space-y-24">
+          <Benefits />
+          {/*<WhyUs />*/}
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-muted/10 text-foreground">
+        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
+          <h2 className="text-2xl font-bold">O que dizem nossos alunos</h2>
+          <div className="grid sm:grid-cols-2 gap-4 text-left">
+            <div className="border rounded p-4 shadow-sm bg-muted">
+              <p className="font-medium text-sm">&quot;Simplesmente o melhor plano que já fiz! Treinos curtos, fáceis de seguir e eficazes.&quot;</p>
+              <p className="mt-2 text-xs text-muted-foreground">— Camila R.</p>
+            </div>
+            <div className="border rounded p-4 shadow-sm bg-muted">
+              <p className="font-medium text-sm">&quot;Voltei a treinar depois de anos parado. Agora faço todo mês e adoro.&quot;</p>
+              <p className="mt-2 text-xs text-muted-foreground">— Rafael T.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RESULTS */}
+      <section className="py-24 bg-background text-foreground">
+        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
+          <h2 className="text-2xl font-bold">Treino real. Resultado real.</h2>
+          <p className="text-muted-foreground">
+            Esse não é um app genérico. Alexandre cria cada treino manualmente, com estrutura mensal e
+            foco em evolução progressiva. Cada mês, você recebe um plano novo e atualizado.
+          </p>
+        </div>
+      </section>
+      <AboutAlexandre/>
+      {/* FAQ */}
+      <section className="py-24 bg-muted/10 text-foreground">
+        <div className="max-w-2xl px-6 mx-auto space-y-6">
+          <h2 className="text-2xl font-bold text-center">Perguntas frequentes</h2>
+          <Card className="bg-muted border border-muted-foreground/10">
+            <CardContent className="p-6 space-y-4 text-muted-foreground text-sm">
+              <details className="border-b pb-4">
+                <summary className="font-medium cursor-pointer">Preciso de equipamentos?</summary>
+                <p className="mt-2">
+                  A maioria dos treinos são para academia, mas você pode adaptar com halteres e elásticos
+                  em casa. Muitos exercícios também podem ser feitos com itens como cadeiras ou banquinhos.
+                </p>
+              </details>
+              <details className="border-b pb-4">
+                <summary className="font-medium cursor-pointer">Posso cancelar quando quiser?</summary>
+                <p className="mt-2">
+                  Sim! O plano PRO é mensal e você pode cancelar a qualquer momento.
+                </p>
+              </details>
+              <details>
+                <summary className="font-medium cursor-pointer">O plano gratuito expira?</summary>
+                <p className="mt-2">
+                  Não. Você pode continuar acessando os 4 treinos gratuitos todo mês, sem pagar nada.
+                </p>
+              </details>
+            </CardContent>
+          </Card>
+        </div>
       </section>
     </main>
   );

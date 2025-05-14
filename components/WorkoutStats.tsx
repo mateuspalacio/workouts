@@ -5,12 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { supabase } from "@/lib/supabase";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
-
-type DoneWorkout = {
-  workout_id: string;
-  done_at: string;
-  title: string;
-};
+import { DoneWorkout } from "@/types/Workout";
 
 export default function WorkoutStats({ month }: { month: string }) {
   const { user, isLoaded } = useUser();

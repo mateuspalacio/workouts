@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
 
 export default function SupportPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -20,10 +21,10 @@ export default function SupportPage() {
     const formData = new FormData(form);
 
     try {
-      const res = await fetch('https://formspree.io/f/xvgaqqzo', {
-        method: 'POST',
+      const res = await fetch("https://formspree.io/f/xvgaqqzo", {
+        method: "POST",
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
         },
         body: formData,
       });
@@ -34,59 +35,64 @@ export default function SupportPage() {
         setSubmitted(true);
         form.reset();
       } else {
-        setError('Something went wrong. Please try again.');
+        setError("Algo deu errado. Tente novamente.");
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
-      console.error(err)
+      console.error(err);
+      setError("Algo deu errado. Tente novamente.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-card rounded-2xl shadow-md max-w-6xl mx-auto my-12 p-8">
-      <h1 className="text-3xl font-bold mb-4">Contact Support</h1>
+    <motion.main
+      className="max-w-2xl mx-auto px-6 py-24 bg-slate-50 rounded-2xl shadow-xl border border-muted/20"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h1 className="text-3xl font-bold mb-4 text-foreground">Suporte</h1>
       <p className="text-muted-foreground mb-8">
-        Having trouble? Fill out the form below and we’ll get back to you as soon as possible.
+        Está com alguma dúvida ou problema? Preencha o formulário abaixo e entraremos em contato o mais rápido possível.
       </p>
 
       {submitted ? (
         <div className="bg-green-100 text-green-800 p-4 rounded-lg">
-          Thank you! Your message has been sent.
+          Obrigado! Sua mensagem foi enviada com sucesso.
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <Label htmlFor="email">Your Email</Label>
+            <Label htmlFor="email">Seu email</Label>
             <Input
               type="email"
               name="email"
               id="email"
               required
-              placeholder="you@example.com"
+              placeholder="voce@exemplo.com"
             />
           </div>
 
           <div>
-            <Label htmlFor="subject">Subject</Label>
+            <Label htmlFor="subject">Assunto</Label>
             <Input
               type="text"
               name="subject"
               id="subject"
               required
-              placeholder="What's your issue?"
+              placeholder="Qual o problema?"
             />
           </div>
 
           <div>
-            <Label htmlFor="message">Message</Label>
+            <Label htmlFor="message">Mensagem</Label>
             <Textarea
               name="message"
               id="message"
               rows={5}
               required
-              placeholder="Explain the issue or feedback in detail"
+              placeholder="Explique com detalhes o que está acontecendo ou deixe seu feedback"
             />
           </div>
 
@@ -95,10 +101,10 @@ export default function SupportPage() {
           )}
 
           <Button type="submit" disabled={loading}>
-            {loading ? 'Sending...' : 'Send Message'}
+            {loading ? "Enviando..." : "Enviar mensagem"}
           </Button>
         </form>
       )}
-    </div>
+    </motion.main>
   );
 }

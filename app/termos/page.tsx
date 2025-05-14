@@ -1,21 +1,35 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function TermsPage() {
-    return (
-      <div className="max-w-3xl mx-auto px-6 py-16 space-y-6">
-        <h1 className="text-3xl font-bold">Terms of Service</h1>
-        <p className="text-muted-foreground">
-          By using this application, you agree to follow these terms of service.
-        </p>
-        <ul className="list-disc list-inside space-y-2">
-          <li>Do not use this tool for illegal, harmful, or unethical purposes.</li>
-          <li>Generated content is your responsibility. We are not liable for how it&apos;s used.</li>
-          <li>We may update or modify tools, pricing, or features at any time.</li>
-          <li>Subscription plans renew automatically unless canceled before the end of the billing period.</li>
-        </ul>
-        <p>
-          If you have questions about these terms, please contact us at{' '}
-          <a href="mailto:hey@writefluxai.com" className="underline">hey@writefluxai.com</a>.
-        </p>
-      </div>
-    );
-  }
-  
+  return (
+    <motion.main
+      className="max-w-3xl mx-auto px-6 py-24 space-y-8 bg-slate-50 rounded-2xl shadow-xl border border-muted/20 text-background"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <h1 className="text-3xl font-bold">Termos de Uso</h1>
+
+      <p className="text-muted">
+        Ao utilizar este aplicativo, você concorda com os termos descritos abaixo.
+      </p>
+
+      <ul className="list-disc list-inside space-y-2 text-muted">
+        <li>Não utilize esta plataforma para fins ilegais, prejudiciais ou antiéticos.</li>
+        <li>Você é o único responsável pelo uso dos treinos e conteúdos aqui disponibilizados.</li>
+        <li>Podemos modificar funcionalidades, planos e preços a qualquer momento.</li>
+        <li>Assinaturas PRO renovam automaticamente, salvo cancelamento antes do fim do ciclo.</li>
+      </ul>
+
+      <p className="text-muted">
+        Em caso de dúvidas sobre os termos, entre em contato conosco em:{' '}
+        <a href="mailto:suporte@seutreino.app" className="underline">
+          suporte@seutreino.app
+        </a>
+        .
+      </p>
+    </motion.main>
+  );
+}

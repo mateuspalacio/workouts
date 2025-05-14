@@ -92,7 +92,7 @@ export default function DashboardContent() {
               key={m}
               onClick={() => setSelectedMonth(m)}
               className={`text-sm px-3 py-1 border rounded ${
-                selectedMonth === m ? "bg-primary text-white" : "bg-muted"
+                selectedMonth === m ? "bg-primary text-white" : "bg-ghost"
               }`}
             >
               {m}

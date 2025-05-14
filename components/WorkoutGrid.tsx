@@ -62,12 +62,15 @@ const [loading, setLoading] = useState(true);
     const monthEnd = new Date(year, monthNum, 1).toISOString().split("T")[0];
 
 
-      const { data: rawWorkouts, error } = await supabase
-        .from("workouts")
-        .select("*, exercises(*)")
-        .gte("month", monthStart)
-        .lt("month", monthEnd)
-        .order("title", { ascending: true });
+      const nowISO = new Date().toISOString();
+
+const { data: rawWorkouts, error } = await supabase
+  .from("workouts")
+  .select("*, exercises(*)")
+  .gte("month", monthStart)
+  .lt("month", monthEnd)
+  .lte("release_at", nowISO) // <- hide future
+  .order("title", { ascending: true });
 
       if (error) {
         console.error("Erro ao buscar treinos:", error);
