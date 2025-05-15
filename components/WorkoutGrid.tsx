@@ -25,6 +25,7 @@ type Workout = {
   is_free: boolean;
   month: string;
   exercises: Exercise[];
+  tag?: string;
 };
 
 export default function WorkoutGrid({ month, tag }: { month: string; tag?: string }) {
@@ -56,17 +57,17 @@ const [loading, setLoading] = useState(true);
 
     const fetchWorkoutsAndExercises = async () => {
       setLoading(true);
-
-    const [year, monthNum] = month.split("-").map(Number);
-    const monthStart = `${year}-${String(monthNum).padStart(2, "0")}-01`;
-    const monthEnd = new Date(year, monthNum, 1).toISOString().split("T")[0];
+const [year, monthNum] = month.split("-").map(Number);
+const monthStart = `${year}-${String(monthNum).padStart(2, "0")}-01`;
+const nextMonth = new Date(year, monthNum, 1); // ← next month
+const monthEnd = nextMonth.toISOString().split("T")[0];
 
 
       const nowISO = new Date().toISOString();
 
 const { data: rawWorkouts, error } = await supabase
   .from("workouts")
-  .select("*, exercises(*)")
+  .select("id, title, description, is_free, tag, month, release_at, exercises(*)")
   .gte("month", monthStart)
   .lt("month", monthEnd)
   .lte("release_at", nowISO) // <- hide future
@@ -86,11 +87,9 @@ if (plano === "free") {
   filtered = filtered.slice(0, 20);
 }
 
-if (tag) {
+if (tag && tag !== 'Todas') {
   filtered = filtered.filter((w) => w.tag === tag);
 }
-
-
       setWorkouts(filtered);
       setLoading(false);
     };
@@ -118,7 +117,8 @@ if (tag) {
 
     fetchWorkoutsAndExercises();
     fetchDoneWorkouts();
-  }, [isLoaded, plano, user?.id]);
+  }, [isLoaded, plano, user?.id, tag, month]);
+
 
   if (loading) {
     return (
@@ -168,6 +168,8 @@ if (tag) {
                   </Button>
                 </form>
               )}
+              <p className="text-xs text-muted-foreground italic">Tag: {workout.tag}</p>
+
             </CardContent>
           </Card>
         );

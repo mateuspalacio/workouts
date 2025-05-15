@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SeuTreino — Treinos mensais com personal",
+  title: "Elevio — Treinos mensais com personal",
   description: "Treinos online mensais com vídeos, plano grátis e suporte do Alexandre Melo — personal com 30 anos de experiência.",
 };
 

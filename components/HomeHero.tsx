@@ -30,7 +30,7 @@ export default function HomeHero() {
         {isSignedIn ? (
             <Link href={'/dashboard'}>
           <Button size="lg">
-            Começar agora
+            Seus Treinos
           </Button>
           </Link>
         ) : (
@@ -38,7 +38,7 @@ export default function HomeHero() {
             <Button size="lg">Começar agora</Button>
           </SignUpButton>
         )}
-            <Link href={'/planos'}>
+            <Link href={'/precos'}>
         <Button variant="secondary" size="lg">
           Ver plano Pro
         </Button>

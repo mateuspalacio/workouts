@@ -28,7 +28,7 @@ export default function Sidebar() {
           <Link href="/">
             <Image
               src={collapsed? "/logo_simple.png": "/logo.png"}
-              alt="WriteFlux"
+              alt="Elevio"
               width={collapsed ? 32 : 120}
               height={40}
               className="transition-all"

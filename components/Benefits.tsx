@@ -61,7 +61,7 @@ export default function Benefits() {
               Mais variedade, mais resultado
             </li>
           </ul>
-          <Link href="/planos">
+          <Link href="/precos">
             <Button className="w-full mt-6">Assinar agora</Button>
           </Link>
         </div>

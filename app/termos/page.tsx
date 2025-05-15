@@ -25,8 +25,8 @@ export default function TermsPage() {
 
       <p className="text-muted">
         Em caso de dúvidas sobre os termos, entre em contato conosco em:{' '}
-        <a href="mailto:suporte@seutreino.app" className="underline">
-          suporte@seutreino.app
+        <a href="mailto:suporte@Elevio.app" className="underline">
+          suporte@Elevio.app
         </a>
         .
       </p>

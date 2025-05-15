@@ -8,6 +8,7 @@ import { usePremium } from "@/context/PremiumContext";
 import { supabase } from "@/lib/supabase";
 import WorkoutStats from "./WorkoutStats";
 import { Label } from "./ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 export default function DashboardContent() {
   const { user, isLoaded } = useUser();
@@ -104,18 +105,20 @@ export default function DashboardContent() {
 {isPremium && (
   <div className="mb-4 flex gap-2 items-center">
     <Label htmlFor="tagFilter">Filtrar por tag</Label>
-    <select
-      id="tagFilter"
-      value={filterTag}
-      onChange={(e) => setFilterTag(e.target.value)}
-      className="border p-2 rounded"
-    >
-      <option value="">Todas</option>
-      <option value="Força">Força</option>
-      <option value="Cardio">Cardio</option>
-      <option value="Inferiores">Inferiores</option>
-      <option value="Superior">Superior</option>
-    </select>
+    
+    <Select value={filterTag} onValueChange={setFilterTag}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Filtrar por tag" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="Todas">Todas</SelectItem>
+        <SelectItem value="Força">Força</SelectItem>
+        <SelectItem value="Cardio">Cardio</SelectItem>
+        <SelectItem value="Inferiores">Inferiores</SelectItem>
+        <SelectItem value="Superior">Superior</SelectItem>
+      </SelectContent>
+    </Select>
+    
   </div>
 )}
 

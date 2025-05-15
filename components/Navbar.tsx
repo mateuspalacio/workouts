@@ -60,7 +60,7 @@ const [open, setOpen] = useState(false);
   <SheetTitle>
     <Image
               src="/logo_simple.png"
-              alt="WriteFlux"
+              alt="Elevio"
               width={32}
               height={40}
               className="transition-all"

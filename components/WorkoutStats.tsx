@@ -85,15 +85,16 @@ export default function WorkoutStats({ month }: { month: string }) {
 
   return (
     <section className="mt-8">
+      
       <h2 className="text-xl font-bold mb-2">Resumo do mês</h2>
-
       <div className="w-full h-[200px] mb-6">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            <XAxis dataKey="week" />
+            <XAxis dataKey="week"/>
             <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="count" />
+            <Tooltip 
+  formatter={(value: number) => [`${value}`, "Quantidade"]}/>
+            <Bar dataKey="count" fill="#3b82f6" />
           </BarChart>
         </ResponsiveContainer>
       </div>

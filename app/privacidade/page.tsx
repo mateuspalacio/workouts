@@ -25,8 +25,8 @@ export default function PrivacyPage() {
       <p>
         Todas as requisições são feitas de forma segura e criptografada. Se você tiver dúvidas ou
         preocupações sobre o uso dos seus dados, entre em contato conosco em:{' '}
-        <a href="mailto:suporte@seutreino.app" className="underline">
-          suporte@seutreino.app
+        <a href="mailto:suporte@Elevio.app" className="underline">
+          suporte@Elevio.app
         </a>
         .
       </p>

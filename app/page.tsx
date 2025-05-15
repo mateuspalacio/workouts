@@ -4,6 +4,7 @@ import Image from "next/image";
 import Benefits from "@/components/Benefits";
 import AboutAlexandre from "@/components/AboutAlexandre";
 import OurProduct from "@/components/OurProduct";
+import TestimonialsSection from "@/components/TestimonialsSection";
 
 export default function HomePage() {
   return (
@@ -41,7 +42,7 @@ export default function HomePage() {
       <section className="py-24 bg-muted/10 text-foreground">
         <div className="max-w-5xl px-6 mx-auto grid md:grid-cols-2 gap-10 items-center">
           <Image
-            src="/pt-foto.jpg"
+            src="/alexandre.jpeg"
             width={200}
             height={100}
             alt="Personal Trainer"
@@ -71,21 +72,7 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-muted/10 text-foreground">
-        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
-          <h2 className="text-2xl font-bold">O que dizem nossos alunos</h2>
-          <div className="grid sm:grid-cols-2 gap-4 text-left">
-            <div className="border rounded p-4 shadow-sm bg-muted">
-              <p className="font-medium text-sm">&quot;Simplesmente o melhor plano que já fiz! Treinos curtos, fáceis de seguir e eficazes.&quot;</p>
-              <p className="mt-2 text-xs text-muted-foreground">— Camila R.</p>
-            </div>
-            <div className="border rounded p-4 shadow-sm bg-muted">
-              <p className="font-medium text-sm">&quot;Voltei a treinar depois de anos parado. Agora faço todo mês e adoro.&quot;</p>
-              <p className="mt-2 text-xs text-muted-foreground">— Rafael T.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection/>
 
       {/* RESULTS */}
       <section className="py-24 bg-background text-foreground">

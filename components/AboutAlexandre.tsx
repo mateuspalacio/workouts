@@ -14,7 +14,7 @@ export default function AboutAlexandre() {
     >
       <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         <Image
-          src="/pt-foto.jpg"
+          src="/alexandre.jpeg"
           width={400}
           height={400}
           alt="Alexandre Melo"

@@ -6,9 +6,9 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-sm">
         {/* Left side */}
         <div className="text-center sm:text-left space-y-1">
-          <p>&copy; {new Date().getFullYear()} WriteFlux</p>
+          <p>&copy; {new Date().getFullYear()} Elevio</p>
           <p>
-            Contato: <a href="mailto:hey@writefluxai.com" className="hover:underline">hey@writefluxai.com</a>
+            Contato: <a href="mailto:hey@Elevioai.com" className="hover:underline">hey@Elevioai.com</a>
           </p>
         </div>
 <p>
