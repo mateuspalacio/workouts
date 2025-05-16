@@ -5,7 +5,6 @@ import Benefits from "@/components/Benefits";
 import AboutAlexandre from "@/components/AboutAlexandre";
 import OurProduct from "@/components/OurProduct";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import TestimonialsPeersSection from "@/components/TestimonialsPeersSection";
 
 export default function HomePage() {
   return (
