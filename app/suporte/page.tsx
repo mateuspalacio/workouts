@@ -53,7 +53,7 @@ export default function SupportPage() {
       transition={{ duration: 0.6 }}
     >
       <h1 className="text-3xl font-bold mb-4 text-background">Suporte</h1>
-      <p className="text-muted-foreground mb-8">
+      <p className="text-background mb-8">
         Está com alguma dúvida ou problema? Preencha o formulário abaixo e entraremos em contato o mais rápido possível.
       </p>
 
@@ -64,8 +64,8 @@ export default function SupportPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <Label htmlFor="email">Seu email</Label>
-            <Input
+            <Label htmlFor="email" className="text-background">Seu email</Label>
+            <Input  className="text-background"
               type="email"
               name="email"
               id="email"
@@ -75,8 +75,8 @@ export default function SupportPage() {
           </div>
 
           <div>
-            <Label htmlFor="subject">Assunto</Label>
-            <Input
+            <Label  className="text-background" htmlFor="subject">Assunto</Label>
+            <Input  className="text-background"
               type="text"
               name="subject"
               id="subject"
@@ -86,8 +86,8 @@ export default function SupportPage() {
           </div>
 
           <div>
-            <Label htmlFor="message">Mensagem</Label>
-            <Textarea
+            <Label htmlFor="message" className="text-background">Mensagem</Label>
+            <Textarea  className="text-background"
               name="message"
               id="message"
               rows={5}
