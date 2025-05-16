@@ -5,8 +5,23 @@ import Benefits from "@/components/Benefits";
 import AboutAlexandre from "@/components/AboutAlexandre";
 import OurProduct from "@/components/OurProduct";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import { validateUserSubscription } from "@/lib/checkSubscription";
+import { getOrCreateUser } from "@/lib/getOrCreateUser";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await currentUser();
+  if (user) {
+    
+  const clerkId = user.id;
+  const email = user.emailAddresses?.[0]?.emailAddress;
+
+  // Ensure user exists
+  await getOrCreateUser(clerkId, email);
+  await validateUserSubscription(clerkId)
+  }
+
+
   return (
     <main className="space-y-0">
       {/* HERO */}
