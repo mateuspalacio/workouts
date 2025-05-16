@@ -21,7 +21,7 @@ export default function SupportPage() {
     const formData = new FormData(form);
 
     try {
-      const res = await fetch("https://formspree.io/f/xvgaqqzo", {
+      const res = await fetch("https://formspree.io/f/mzzrogol", {
         method: "POST",
         headers: {
           Accept: "application/json",
