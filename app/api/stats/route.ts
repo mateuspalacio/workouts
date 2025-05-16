@@ -33,17 +33,17 @@ export async function GET(req: Request) {
 
   // Step 2: Query workout completions
   const { data, error } = await supabase
-    .from("user_workout_done")
-    .select("workout_id, done_at, workouts(title)")
-    .eq("user_id", userRow.id)
-    .gte("done_at", start)
-    .lt("done_at", end)
-    .order("done_at", { ascending: true });
+  .from("user_workout_done")
+  .select("workout_id, done_at, workouts(title)")
+  .eq("user_id", userRow.id)
+  .gte("done_at", start)
+  .lt("done_at", end)
+  .order("done_at", { ascending: true });
 
   if (error) {
     return NextResponse.json({ error: "Erro ao buscar stats." }, { status: 500 });
   }
-
+  
   // Step 3: Aggregate
   const byWeek: Record<string, number> = {};
   const completed: { workout_id: string; title: string; date: string }[] = [];
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
 
     completed.push({
       workout_id: item.workout_id,
-      title: item.workouts?.title || "Treino",
+      title: item.workouts?.[0]?.title || "Treino",
       date: date.toLocaleDateString("pt-BR"),
     });
   });
