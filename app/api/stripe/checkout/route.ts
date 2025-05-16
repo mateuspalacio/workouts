@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         quantity: 1,
       },
     ],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`, // TODO: ADD
+    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/precos`,
     customer_email: email, // ✅ used to look up the user in webhook
     metadata: {

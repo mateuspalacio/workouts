@@ -5,6 +5,7 @@ import Benefits from "@/components/Benefits";
 import AboutAlexandre from "@/components/AboutAlexandre";
 import OurProduct from "@/components/OurProduct";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import TestimonialsPeersSection from "@/components/TestimonialsPeersSection";
 
 export default function HomePage() {
   return (
@@ -13,49 +14,6 @@ export default function HomePage() {
       <section className="py-10 bg-gradient-to-b from-slate-900 via-slate-950 to-black text-white">
         <div className="max-w-3xl px-6 py-2 mx-auto">
           <HomeHero />
-        </div>
-      </section>
-
-        <div className="py-2 mx-auto">
-          <OurProduct/>
-          </div>
-          <section className="py-20 bg-muted/10">
-  <div className="max-w-6xl mx-auto px-6 space-y-8 text-center">
-    <h2 className="text-2xl font-bold">Veja como é por dentro</h2>
-    <p className="text-muted-foreground max-w-2xl mx-auto">
-      Interface simples, intuitiva e pensada para o treino. Assista, marque como feito, acompanhe seu progresso.
-    </p>
-
-    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-      <div className="rounded-xl overflow-hidden shadow border bg-background">
-        <Image src="/previews/dashboard.webp" width={200} height={200} alt="Dashboard preview" className="w-full object-cover" />
-      </div>
-      <div className="rounded-xl overflow-hidden shadow border bg-background">
-        <Image src="/previews/modal.webp" width={200} height={200} alt="Workout modal preview" className="w-full object-cover" />
-      </div>
-      <div className="rounded-xl overflow-hidden shadow border bg-background">
-        <Image src="/previews/stats.webp" width={200} height={200} alt="Estatísticas do treino" className="w-full object-cover" />
-      </div>
-    </div>
-  </div>
-</section>
-
-      {/* VIDEO PREVIEW */}
-      <section className="py-10 bg-background text-foreground">
-        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
-          <h2 className="text-2xl font-bold">Veja como funciona</h2>
-          <p className="text-muted-foreground">
-            Cada treino vem com vídeo. Alexandre mostra como fazer com técnica e segurança, não importa o exercício.
-          </p>
-          {/*<div className="aspect-video rounded overflow-hidden shadow-lg border">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1&showinfo=0"
-              className="w-full h-full"
-              frameBorder="0"
-              allowFullScreen
-              title="Demonstração de treino"
-            />
-          </div>*/}
         </div>
       </section>
 
@@ -84,8 +42,12 @@ export default function HomePage() {
         </div>
       </section>
 
+        <div className="mx-auto">
+          <OurProduct/>
+          </div>
+          
       {/* BENEFITS + WHY US */}
-      <section className="py-24 bg-background text-foreground">
+      <section className="py-6 bg-background text-foreground">
         <div className="max-w-5xl px-6 mx-auto space-y-24">
           <Benefits />
           {/*<WhyUs />*/}
@@ -94,6 +56,25 @@ export default function HomePage() {
 
       {/* TESTIMONIALS */}
       <TestimonialsSection/>
+
+      {/* VIDEO PREVIEW */}
+      <section className="py-10 bg-background text-foreground">
+        <div className="max-w-3xl px-6 mx-auto text-center space-y-6">
+          <h2 className="text-2xl font-bold">Como funciona?</h2>
+          <p className="text-muted-foreground">
+            Cada treino vem com vídeo. Alexandre mostra como fazer com técnica e segurança, não importa o exercício.
+          </p>
+          {/*<div className="aspect-video rounded overflow-hidden shadow-lg border">
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1&showinfo=0"
+              className="w-full h-full"
+              frameBorder="0"
+              allowFullScreen
+              title="Demonstração de treino"
+            />
+          </div>*/}
+        </div>
+      </section>
 
       {/* RESULTS */}
       <section className="py-24 bg-background text-foreground">
@@ -105,6 +86,25 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+      {/*<TestimonialsPeersSection/>*/}
+      <section className="py-20 bg-muted/10">
+  <div className="max-w-6xl mx-auto px-6 space-y-8 text-center">
+    <h2 className="text-2xl font-bold">Veja como é por dentro</h2>
+    <p className="text-muted-foreground max-w-2xl mx-auto">
+      Interface simples, intuitiva e pensada para o treino. Assista, marque como feito, acompanhe seu progresso.
+    </p>
+
+    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+      <div className="rounded-xl overflow-hidden shadow border bg-background">
+        <Image src="/painel.png" width={400} height={400} alt="Dashboard preview" className="w-full object-cover" />
+      </div>
+      <div className="rounded-xl overflow-hidden shadow border bg-background">
+        <Image src="/stats.png" width={400} height={400} alt="Estatísticas do treino" className="w-full object-cover" />
+      </div>
+    </div>
+  </div>
+</section>
+
       <AboutAlexandre/>
       {/* FAQ */}
       <section className="py-24 bg-muted/10 text-foreground">

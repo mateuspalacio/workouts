@@ -84,7 +84,7 @@ if (Array.isArray(json)) {
 if (res.ok) {
   cancelEditing(id);
   setStatus("Alterações salvas com sucesso.");
-  const refreshed = await fetch(`/api/workouts?month=${month}`);
+  const refreshed = await fetch(`/api/workouts?from=${month}`);
   const data = await refreshed.json();
   if (Array.isArray(data)) {
   setWorkouts(data);
@@ -162,7 +162,7 @@ if (!isLoaded || !isAdmin) return null;
       <SelectValue placeholder="— Nenhuma —" />
     </SelectTrigger>
     <SelectContent>
-      <SelectItem value="">— Nenhuma —</SelectItem>
+      <SelectItem value="Nenhuma">— Nenhuma —</SelectItem>
       {TAGS.map((tag) => (
         <SelectItem key={tag} value={tag}>
           {tag}

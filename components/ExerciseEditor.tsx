@@ -145,7 +145,7 @@ const handleDelete = async (id: string) => {
     <SelectValue placeholder="— Usar template —" />
   </SelectTrigger>
   <SelectContent>
-    <SelectItem value="">— Usar template —</SelectItem>
+    <SelectItem value="Nenhum">— Usar template —</SelectItem>
     {templates.map((t) => (
       <SelectItem key={t.id} value={t.id}>
         {t.name}

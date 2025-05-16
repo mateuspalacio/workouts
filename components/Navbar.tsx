@@ -9,19 +9,45 @@ import {
   UserButton,
   useUser,
 } from '@clerk/nextjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Menu} from 'lucide-react';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
 import { links } from '@/lib/links';
-import { usePremium } from '@/context/PremiumContext';
 
 export default function Navbar() {
     const pathname = usePathname();
-    const isPremium = usePremium();
 
   const { user } = useUser();
+  
+const [isPremium, setIsPremium] = useState(false);
+
+  useEffect(() => {
+    const checkPremiumStatus = async () => {
+      if (!user?.id) return;
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users`, {
+          method: "POST",
+          body: JSON.stringify({ clerkId: user.id }),
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+
+        const json = await res.json();
+        setIsPremium(json?.ispremium ?? false);
+      } catch (err) {
+        console.error("Error checking premium status:", err);
+      }
+    };
+
+    checkPremiumStatus();
+  }, [user]);
+
   const isAdminUser = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
   const [loading, setLoading] = useState(false);
 const [open, setOpen] = useState(false);
@@ -61,8 +87,8 @@ const [open, setOpen] = useState(false);
     <Image
               src="/logo.png"
               alt="Elevio"
-              width={32}
-              height={40}
+              width={60}
+              height={60}
               className="transition-all"
             />
   </SheetTitle>
@@ -129,7 +155,7 @@ const [open, setOpen] = useState(false);
                 size="sm"
                 disabled={loading}
               >
-                {loading ? 'Loading...' : 'Manage Subscription'}
+                {loading ? 'Carregando...' : 'Gerenciar Inscrição'}
               </Button>
             ) : (
               <Link href="/precos">

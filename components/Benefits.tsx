@@ -8,7 +8,7 @@ import { CheckCircle, Clock4, Dumbbell, Star } from "lucide-react";
 export default function Benefits() {
   return (
     <motion.section
-      className="space-y-12 text-center"
+      className="space-y-6 text-center"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
