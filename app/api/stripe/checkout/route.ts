@@ -37,6 +37,7 @@ export async function POST(req: Request) {
       clerk_id: clerkId,      // ✅ optional backup
       user_email: email,      // ✅ optional backup
     },
+    locale: 'pt-BR'
   });
 
   return NextResponse.json({ url: session.url });
