@@ -1,8 +1,8 @@
 // app/api/exercises/[id]/route.ts
 import { supabase } from "@/lib/supabase";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     params = await params;
   const updates = await req.json();
 
@@ -17,7 +17,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // app/api/exercises/[id]/route.ts (continue)
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
         params = await params;
 
   const { error } = await supabase
