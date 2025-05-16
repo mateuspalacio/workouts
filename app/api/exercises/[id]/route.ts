@@ -7,7 +7,7 @@ type Params = {
   };
 };
 
-export async function PUT(req: Request, {params} : Params) {
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
   const updates = await req.json();
 
