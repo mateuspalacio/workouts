@@ -4,11 +4,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-    params = await params;
+  const {id} = await params;
   const { userId } = await auth();
-  const workoutId = params.id;
+  const workoutId = id;
 
   if (!userId) {
     return NextResponse.json({ error: "Não autenticado." }, { status: 401 });

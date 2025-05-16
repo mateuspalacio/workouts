@@ -2,12 +2,12 @@
 import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
-export async function GET(_: Request, { params }: { params: { clerk_id: string } }) {
-    params = await params;
+export async function GET(_: Request, { params }: { params: Promise<{ clerk_id: string }> }) {
+  const {clerk_id} = await params;
   const { data, error } = await supabase
     .from("users")
     .select("id")
-    .eq("clerk_id", params.clerk_id)
+    .eq("clerk_id", clerk_id)
     .single();
 
   if (!data) return NextResponse.json({ done: [] });

@@ -2,10 +2,10 @@ import { auth } from "@clerk/nextjs/server";
 import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    params = await params;
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const {id}= await params;
   const { userId } = await auth();
-  const workoutId = params.id;
+  const workoutId = id;
 
   if (!userId) {
     return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
