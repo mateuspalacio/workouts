@@ -59,7 +59,7 @@ const [open, setOpen] = useState(false);
         <SheetHeader>
   <SheetTitle>
     <Image
-              src="/logo_simple.png"
+              src="/logo.png"
               alt="Elevio"
               width={32}
               height={40}
@@ -110,7 +110,7 @@ const [open, setOpen] = useState(false);
       </SheetContent>
     </Sheet>
     <Link href="/">
-      <Image src="/logo_simple.png" alt="Logo" width={30} height={40} />
+      <Image src="/logo.png" alt="Logo" width={30} height={40} />
     </Link>
   </div>
 

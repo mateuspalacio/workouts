@@ -1,5 +1,4 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { BadgeCheck, Dumbbell } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,13 +6,18 @@ import { Button } from "@/components/ui/button";
 export default async function SuccessPage() {
   const user = await currentUser();
 
-  const { data } = await supabase
-    .from("users")
-    .select("ispremium")
-    .eq("clerk_id", user?.id)
-    .single();
+  let isPro = false;
 
-  const isPro = data?.ispremium ?? false;
+  if (user?.id) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users`, {
+      method: "POST",
+      body: JSON.stringify({ clerkId: user.id }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const json = await res.json();
+    isPro = json?.ispremium ?? false;
+  }
 
   return (
     <div className="max-w-2xl mx-auto text-center py-20 px-6 space-y-6">

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { ExerciseTemplate } from "@/types/Workout";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 type Exercise = {
   id: string;
@@ -29,60 +29,65 @@ export default function ExerciseEditor({ workoutId }: { workoutId: string }) {
     const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
 
     useEffect(() => {
-    const loadTemplates = async () => {
-        const { data } = await supabase.from("exercise_templates").select("*").order("name");
-        if (data) setTemplates(data);
-    };
-    loadTemplates();
-    }, []);
-
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
-        .from("exercises")
-        .select("*")
-        .eq("workout_id", workoutId)
-        .order("id");
-      if (data) setExercises(data);
-    };
-    load();
-  }, [workoutId]);
-
-  const handleAdd = async () => {
-    if (!form.name || !form.sets_reps) return;
-
-    const { data, error } = await supabase
-      .from("exercises")
-      .insert([{ ...form, workout_id: workoutId }])
-      .select()
-      .single();
-
-    if (error) return setStatus("Erro ao adicionar exercício.");
-
-    setExercises((prev) => [...prev, data]);
-    setForm({ name: "", sets_reps: "", video_url: "", notes: "" });
-    setStatus(null);
+  const loadTemplates = async () => {
+    const res = await fetch("/api/exercise-templates");
+    const json = await res.json();
+    if (Array.isArray(json)) setTemplates(json);
   };
+  loadTemplates();
+}, []);
 
-  const handleUpdate = async (id: string, field: keyof Exercise, value: string) => {
-    const updated = exercises.map((ex) =>
-      ex.id === id ? { ...ex, [field]: value } : ex
-    );
-    setExercises(updated);
-
-    const { error } = await supabase
-      .from("exercises")
-      .update({ [field]: value })
-      .eq("id", id);
-    if (error) setStatus("Erro ao atualizar.");
+useEffect(() => {
+  const load = async () => {
+    const res = await fetch(`/api/exercises?workout_id=${workoutId}`);
+    const json = await res.json();
+    if (Array.isArray(json)) setExercises(json);
   };
+  load();
+}, [workoutId]);
 
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase.from("exercises").delete().eq("id", id);
-    if (!error) {
-      setExercises((prev) => prev.filter((ex) => ex.id !== id));
-    }
-  };
+const handleAdd = async () => {
+  if (!form.name || !form.sets_reps) return;
+
+  const res = await fetch("/api/exercises", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...form, workout_id: workoutId }),
+  });
+
+  const json = await res.json();
+
+  if (!res.ok) {
+    setStatus("Erro ao adicionar exercício.");
+    return;
+  }
+
+  setExercises((prev) => [...prev, json]);
+  setForm({ name: "", sets_reps: "", video_url: "", notes: "" });
+  setStatus(null);
+};
+
+const handleUpdate = async (id: string, field: keyof Exercise, value: string) => {
+  const updated = exercises.map((ex) =>
+    ex.id === id ? { ...ex, [field]: value } : ex
+  );
+  setExercises(updated);
+
+  const res = await fetch(`/api/exercises/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ [field]: value }),
+  });
+
+  if (!res.ok) setStatus("Erro ao atualizar.");
+};
+
+const handleDelete = async (id: string) => {
+  const res = await fetch(`/api/exercises/${id}`, { method: "DELETE" });
+  if (res.ok) {
+    setExercises((prev) => prev.filter((ex) => ex.id !== id));
+  }
+};
 
   return (
     <div className="space-y-4">
@@ -121,31 +126,33 @@ export default function ExerciseEditor({ workoutId }: { workoutId: string }) {
 
       <div className="border p-3 rounded space-y-2">
   <h5 className="font-semibold text-sm mb-1">Adicionar exercício</h5>
-
-  <select
-    value={selectedTemplateId}
-    onChange={(e) => {
-      const id = e.target.value;
-      setSelectedTemplateId(id);
-      const t = templates.find((t) => t.id === id);
-      if (t) {
-        setForm({
-          name: t.name,
-          sets_reps: t.sets_reps,
-          video_url: t.video_url,
-          notes: t.notes || "",
-        });
-      }
-    }}
-    className="border p-2 rounded w-full"
-  >
-    <option value="">— Usar template —</option>
+<Select
+  value={selectedTemplateId}
+  onValueChange={(id) => {
+    setSelectedTemplateId(id);
+    const t = templates.find((t) => t.id === id);
+    if (t) {
+      setForm({
+        name: t.name,
+        sets_reps: t.sets_reps,
+        video_url: t.video_url,
+        notes: t.notes || "",
+      });
+    }
+  }}
+>
+  <SelectTrigger className="w-full">
+    <SelectValue placeholder="— Usar template —" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="">— Usar template —</SelectItem>
     {templates.map((t) => (
-      <option key={t.id} value={t.id}>
+      <SelectItem key={t.id} value={t.id}>
         {t.name}
-      </option>
+      </SelectItem>
     ))}
-  </select>
+  </SelectContent>
+</Select>
 
   <Input
     value={form.name}

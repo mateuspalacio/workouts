@@ -6,10 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Exercise, ExerciseTemplate, Workout } from "@/types/Workout";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 export default function AdminWorkoutBuilder() {
   const [templates, setTemplates] = useState<ExerciseTemplate[]>([]);
@@ -40,18 +40,20 @@ export default function AdminWorkoutBuilder() {
   const isAdmin = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
   // Load exercise templates from Supabase
   useEffect(() => {
-    const fetchTemplates = async () => {
-      const { data, error } = await supabase
-        .from("exercise_templates")
-        .select("*");
-        if (error) console.error(error)
-      if (data) {
-        console.log(data)
-        setTemplates(data)
-      };
-    };
-    fetchTemplates();
-  }, []);
+  const fetchTemplates = async () => {
+    const res = await fetch("/api/exercise-templates");
+    const json = await res.json();
+
+    if (json.success) {
+      setTemplates(json.templates);
+    } else {
+      console.error("Erro ao buscar templates:", json.message);
+    }
+  };
+
+  fetchTemplates();
+}, []);
+
 
   const handleAddExercise = () => {
     if (!exerciseForm.name || !exerciseForm.sets_reps) return;
@@ -98,51 +100,27 @@ export default function AdminWorkoutBuilder() {
   };
 
   const publishAll = async () => {
-    setLoading(true);
-    setStatus(null);
+  setLoading(true);
+  setStatus(null);
 
-    for (const workout of workouts) {
-      const { data: created, error: workoutError } = await supabase
-        .from("workouts")
-        .insert({
-          title: workout.title,
-          description: workout.description,
-          is_free: workout.is_free,
-          month: new Date(`${workout.month}-01`),
-            release_at: workout.release_at ? new Date(workout.release_at) : null,
-        })
-        .select("id")
-        .single();
+  const res = await fetch("/api/workouts/bulk", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ workouts }),
+  });
 
-      if (workoutError || !created) {
-        setStatus("Erro ao salvar algum treino.");
-        setLoading(false);
-        return;
-      }
+  const result = await res.json();
 
-      const insertExercises = workout.exercises.map((ex) => ({
-        workout_id: created.id,
-        name: ex.name,
-        sets_reps: ex.sets_reps,
-        video_url: ex.video_url,
-        notes: ex.notes,
-      }));
-
-      const { error: exError } = await supabase
-        .from("exercises")
-        .insert(insertExercises);
-
-      if (exError) {
-        setStatus("Erro ao salvar exercícios.");
-        setLoading(false);
-        return;
-      }
-    }
-
+  if (res.ok && result.success) {
     setStatus("Todos os treinos foram publicados com sucesso!");
     setWorkouts([]);
-    setLoading(false);
-  };
+  } else {
+    setStatus(result.message || "Erro ao publicar os treinos.");
+  }
+
+  setLoading(false);
+};
+
   const router = useRouter();
 
 useEffect(() => {
@@ -199,40 +177,47 @@ if (!isLoaded || !isAdmin) return null;
   />
 </div>
 
-          <div>
+        <div>
   <Label htmlFor="tag">Categoria</Label>
-  <select
-    id="tag"
+  <Select
     value={currentWorkout.tag || ""}
-    onChange={(e) =>
-      setCurrentWorkout({ ...currentWorkout, tag: e.target.value })
+    onValueChange={(value) =>
+      setCurrentWorkout({ ...currentWorkout, tag: value })
     }
-    className="w-full border p-2 rounded"
   >
-    <option value="">— Nenhuma —</option>
-    {TAG_OPTIONS.map((tag) => (
-      <option key={tag} value={tag}>
-        {tag}
-      </option>
-    ))}
-  </select>
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="— Nenhuma —" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="Nenhuma">— Nenhuma —</SelectItem>
+      {TAG_OPTIONS.map((tag) => (
+        <SelectItem key={tag} value={tag}>
+          {tag}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 </div>
 
 
-          <div>
-            <Label htmlFor="is_free">Plano</Label>
-            <select
-              id="is_free"
-              value={currentWorkout.is_free ? "free" : "pro"}
-              onChange={(e) =>
-                setCurrentWorkout({ ...currentWorkout, is_free: e.target.value === "free" })
-              }
-              className="w-full border rounded p-2"
-            >
-              <option value="free">Gratuito</option>
-              <option value="pro">PRO</option>
-            </select>
-          </div>
+         <div>
+  <Label htmlFor="is_free">Plano</Label>
+  <Select
+    value={currentWorkout.is_free ? "free" : "pro"}
+    onValueChange={(value) =>
+      setCurrentWorkout({ ...currentWorkout, is_free: value === "free" })
+    }
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="free">Gratuito</SelectItem>
+      <SelectItem value="pro">PRO</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
         </div>
       </section>
 
@@ -240,19 +225,26 @@ if (!isLoaded || !isAdmin) return null;
       <section>
         <h3 className="text-lg font-semibold mb-2">Adicionar Exercício</h3>
         <div className="space-y-2">
-          <Label>Usar template</Label>
-          <select
-            value={selectedTemplateId}
-            onChange={(e) => handleTemplateChange(e.target.value)}
-            className="w-full border rounded p-2"
-          >
-            <option value="">— Nenhum —</option>
-            {templates.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </select>
+          <div>
+  <Label>Usar template</Label>
+  <Select
+    value={selectedTemplateId}
+    onValueChange={(id) => handleTemplateChange(id)}
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="— Nenhum —" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="Nenhum">— Nenhum —</SelectItem>
+      {templates.map((t) => (
+        <SelectItem key={t.id} value={t.id}>
+          {t.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+
 
           <div>
             <Label>Nome</Label>

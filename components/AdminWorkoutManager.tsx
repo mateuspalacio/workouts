@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/lib/supabase";
 import { Trash2, Save } from "lucide-react";
 import ExerciseEditor from "./ExerciseEditor";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 const TAGS = ["Força", "Cardio", "Superior", "Inferiores", "Mobilidade"];
 
@@ -19,35 +21,40 @@ type Workout = {
   tag?: string;
   month: string;
   release_at: string;
+  exercises?: unknown[];
 };
+
 
 export default function AdminWorkoutManager() {
   const now = new Date();
-  const [month, setMonth] = useState(now.toISOString().slice(0, 7)); // YYYY-MM
+  const [month, setMonth] = useState(now.toISOString().slice(0, 7));
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [editing, setEditing] = useState<Record<string, Workout>>({});
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const { user, isLoaded } = useUser();
+const isAdmin = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
   useEffect(() => {
-    const fetch = async () => {
+    const fetchWorkouts = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("workouts")
-        .select("*")
-        .gte("month", `${month}-01`)
-        .lt("month", new Date(Number(month.split("-")[0]), Number(month.split("-")[1]), 1).toISOString().slice(0, 10))
-        .order("title");
+      const res = await fetch(`/api/workouts?from=${month}`);
+const json = await res.json();
+console.log("Fetched workouts:", json); // <- this will help confirm
 
-      if (error) console.error(error);
-      else setWorkouts(data || []);
+if (Array.isArray(json)) {
+  setWorkouts(json); // ✅ ACTUALLY update your state
+} else {
+  console.error("Unexpected response from API:", json);
+}
+
       setLoading(false);
     };
 
-    fetch();
+    fetchWorkouts();
   }, [month]);
 
-  const handleEditChange = (id: string, field: keyof Workout, value: string | boolean) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleEditChange = (id: string, field: keyof Workout, value: any) => {
     setEditing((prev) => ({
       ...prev,
       [id]: { ...prev[id], [field]: value },
@@ -68,36 +75,46 @@ export default function AdminWorkoutManager() {
 
   const saveChanges = async (id: string) => {
     const update = editing[id];
-    const { error } = await supabase
-      .from("workouts")
-      .update({
-        title: update.title,
-        description: update.description,
-        is_free: update.is_free,
-        tag: update.tag,
-  release_at: update.release_at
-    ? new Date(update.release_at)
-    : null,
-      })
-      .eq("id", id);
 
-    if (error) {
+    const res = await fetch(`/api/workouts/${id}/edit`, {
+      method: "PUT",
+      body: JSON.stringify(update),
+      headers: { "Content-Type": "application/json" },
+    });
+if (res.ok) {
+  cancelEditing(id);
+  setStatus("Alterações salvas com sucesso.");
+  const refreshed = await fetch(`/api/workouts?month=${month}`);
+  const data = await refreshed.json();
+  if (Array.isArray(data)) {
+  setWorkouts(data);
+} else {
+  console.error("API returned unexpected format:", data);
+}
+
+}
+
+     else {
       setStatus("Erro ao salvar alterações.");
-    } else {
-      setWorkouts((prev) =>
-        prev.map((w) => (w.id === id ? { ...w, ...update } : w))
-      );
-      cancelEditing(id);
-      setStatus("Alterações salvas com sucesso.");
     }
   };
 
   const deleteWorkout = async (id: string) => {
-    const { error } = await supabase.from("workouts").delete().eq("id", id);
-    if (!error) {
+    const res = await fetch(`/api/workouts/${id}`, { method: "DELETE" });
+    if (res.ok) {
       setWorkouts((prev) => prev.filter((w) => w.id !== id));
     }
   };
+
+  const router = useRouter();
+
+useEffect(() => {
+  if (isLoaded && !isAdmin) {
+    router.push("/");
+  }
+}, [isLoaded, isAdmin, router]);
+
+if (!isLoaded || !isAdmin) return null;
 
   return (
     <div className="space-y-6">
@@ -123,9 +140,7 @@ export default function AdminWorkoutManager() {
                 <Label>Título</Label>
                 <Input
                   value={editing[w.id].title}
-                  onChange={(e) =>
-                    handleEditChange(w.id, "title", e.target.value)
-                  }
+                  onChange={(e) => handleEditChange(w.id, "title", e.target.value)}
                 />
               </div>
               <div>
@@ -138,45 +153,53 @@ export default function AdminWorkoutManager() {
                 />
               </div>
               <div>
-                <Label>Tag</Label>
-                <select
-                  value={editing[w.id].tag || ""}
-                  onChange={(e) =>
-                    handleEditChange(w.id, "tag", e.target.value)
-                  }
-                  className="border p-2 rounded w-full"
-                >
-                  <option value="">— Nenhuma —</option>
-                  {TAGS.map((tag) => (
-                    <option key={tag} value={tag}>
-                      {tag}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <Label>Plano</Label>
-                <select
-                  value={editing[w.id].is_free ? "free" : "pro"}
-                  onChange={(e) =>
-                    handleEditChange(w.id, "is_free", e.target.value === "free")
-                  }
-                  className="border p-2 rounded w-full"
-                >
-                  <option value="free">Gratuito</option>
-                  <option value="pro">PRO</option>
-                </select>
-              </div>
-<div>
-  <Label>Data de liberação</Label>
-  <Input
-    type="datetime-local"
-    value={editing[w.id].release_at?.slice(0, 16) || ""}
-    onChange={(e) =>
-      handleEditChange(w.id, "release_at", e.target.value)
-    }
-  />
+  <Label>Tag</Label>
+  <Select
+    value={editing[w.id].tag || ""}
+    onValueChange={(value) => handleEditChange(w.id, "tag", value)}
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue placeholder="— Nenhuma —" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="">— Nenhuma —</SelectItem>
+      {TAGS.map((tag) => (
+        <SelectItem key={tag} value={tag}>
+          {tag}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
 </div>
+
+              <div>
+  <Label>Plano</Label>
+  <Select
+    value={editing[w.id].is_free ? "free" : "pro"}
+    onValueChange={(value) =>
+      handleEditChange(w.id, "is_free", value === "free")
+    }
+  >
+    <SelectTrigger className="w-full">
+      <SelectValue />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="free">Gratuito</SelectItem>
+      <SelectItem value="pro">PRO</SelectItem>
+    </SelectContent>
+  </Select>
+</div>
+
+              <div>
+                <Label>Data de liberação</Label>
+                <Input
+                  type="datetime-local"
+                  value={editing[w.id].release_at?.slice(0, 16) || ""}
+                  onChange={(e) =>
+                    handleEditChange(w.id, "release_at", e.target.value)
+                  }
+                />
+              </div>
 
               <div className="flex gap-2 mt-3">
                 <Button onClick={() => saveChanges(w.id)}>
@@ -186,10 +209,10 @@ export default function AdminWorkoutManager() {
                   Cancelar
                 </Button>
               </div>
-  <div className="mt-2 pl-4 border-l">
-    <ExerciseEditor workoutId={w.id} />
-  </div>
 
+              <div className="mt-2 pl-4 border-l">
+                <ExerciseEditor workoutId={w.id} />
+              </div>
             </div>
           ) : (
             <div
@@ -198,26 +221,23 @@ export default function AdminWorkoutManager() {
             >
               <div className="flex-1 space-y-1">
                 <h3 className="font-semibold">{w.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {w.description}
-                </p>
+                <p className="text-sm text-muted-foreground">{w.description}</p>
                 <p className="text-xs">
                   📌 {w.tag || "Sem tag"} — Plano:{" "}
                   <strong>{w.is_free ? "Gratuito" : "PRO"}</strong>
                 </p>
                 <p className="text-xs text-muted-foreground">
-  Liberar em: {w.release_at ? new Date(w.release_at).toLocaleString("pt-BR") : "—"}
-</p>
-
+                  Liberar em:{" "}
+                  {w.release_at
+                    ? new Date(w.release_at).toLocaleString("pt-BR")
+                    : "—"}
+                </p>
               </div>
               <div className="flex flex-col gap-2">
                 <Button variant="outline" onClick={() => startEditing(w)}>
                   Editar
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => deleteWorkout(w.id)}
-                >
+                <Button variant="destructive" onClick={() => deleteWorkout(w.id)}>
                   <Trash2 size={16} className="mr-1" /> Excluir
                 </Button>
               </div>

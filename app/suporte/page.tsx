@@ -47,12 +47,12 @@ export default function SupportPage() {
 
   return (
     <motion.main
-      className="max-w-2xl mx-auto px-6 py-24 bg-slate-50 rounded-2xl shadow-xl border border-muted/20"
+      className="max-w-2xl mx-auto px-6 py-12 bg-slate-50 rounded-2xl shadow-xl border border-muted/20"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <h1 className="text-3xl font-bold mb-4 text-foreground">Suporte</h1>
+      <h1 className="text-3xl font-bold mb-4 text-background">Suporte</h1>
       <p className="text-muted-foreground mb-8">
         Está com alguma dúvida ou problema? Preencha o formulário abaixo e entraremos em contato o mais rápido possível.
       </p>

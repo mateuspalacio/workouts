@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="text-center sm:text-left space-y-1">
           <p>&copy; {new Date().getFullYear()} Elevio</p>
           <p>
-            Contato: <a href="mailto:hey@Elevioai.com" className="hover:underline">hey@Elevioai.com</a>
+            Contato: <a href="mailto:hey@elevioapp.com" className="hover:underline">hey@elevioapp.com</a>
           </p>
         </div>
 <p>

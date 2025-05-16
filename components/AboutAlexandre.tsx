@@ -6,20 +6,29 @@ import Image from "next/image";
 export default function AboutAlexandre() {
   return (
     <motion.section
-      className="py-24 bg-background text-foreground"
+      className="py-12 bg-background text-foreground"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
     >
       <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
+       <div className="space-y-4">
         <Image
-          src="/alexandre.jpeg"
+          src="/alexandre-2.jpeg"
           width={400}
           height={400}
           alt="Alexandre Melo"
           className="rounded-xl shadow-xl object-cover w-full max-h-[400px]"
         />
+        <Image
+          src="/alexandre-3.jpeg"
+          width={400}
+          height={400}
+          alt="Alexandre Melo"
+          className="rounded-xl shadow-xl object-cover w-full max-h-[400px]"
+        />
+        </div>
         <div className="space-y-4">
           <h2 className="text-2xl font-bold">Sobre o Alexandre</h2>
   <p className="text-muted-foreground text-base leading-relaxed">

@@ -27,7 +27,7 @@ export default function Sidebar() {
         <div className="flex items-center justify-center py-4 px-2">
           <Link href="/">
             <Image
-              src={collapsed? "/logo_simple.png": "/logo.png"}
+              src={collapsed? "/logo.png": "/logo.png"}
               alt="Elevio"
               width={collapsed ? 32 : 120}
               height={40}

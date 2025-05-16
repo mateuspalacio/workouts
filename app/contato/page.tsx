@@ -7,7 +7,7 @@ export default function ContactPage() {
         </p>
         <p>
           Email us anytime at{' '}
-          <a href="mailto:hey@Elevioai.com" className="underline font-medium">hey@Elevioai.com</a>
+          <a href="mailto:hey@elevioapp.com" className="underline font-medium">hey@elevioapp.com</a>
         </p>
       </div>
     );

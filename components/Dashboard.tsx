@@ -5,7 +5,6 @@ import { useUser } from "@clerk/nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 import WorkoutGrid from "./WorkoutGrid";
 import { usePremium } from "@/context/PremiumContext";
-import { supabase } from "@/lib/supabase";
 import WorkoutStats from "./WorkoutStats";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -24,43 +23,22 @@ export default function DashboardContent() {
   const [completedCount, setCompletedCount] = useState(0);
   const [filterTag, setFilterTag] = useState<string>("");
 
-  useEffect(() => {
-    if (!isLoaded || !user?.id) return;
+ useEffect(() => {
+  if (!isLoaded || !user?.id || !isPremium) return;
 
-    const fetchUserUUID = async () => {
-      const { data, error } = await supabase
-        .from("users")
-        .select("id")
-        .eq("clerk_id", user.id)
-        .single();
+  const fetchCount = async () => {
+    const res = await fetch(`/api/stats/completed?clerkId=${user.id}&month=${selectedMonth}`);
+    const json = await res.json();
+    if (json.success) {
+      setCompletedCount(json.count);
+    } else {
+      console.error("Erro ao buscar estatísticas:", json.error);
+    }
+  };
 
-        if (error) console.error(error);
-      if (data) {
+  fetchCount();
+}, [isLoaded, user?.id, selectedMonth, isPremium]);
 
-        const start = `${now.getFullYear()}-${String(
-          now.getMonth() + 1
-        ).padStart(2, "0")}-01`;
-        const end = new Date(
-          now.getFullYear(),
-          now.getMonth() + 1,
-          1
-        ).toISOString().split("T")[0];
-
-        const { count } = await supabase
-          .from("user_workout_done")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", data.id)
-          .gte("done_at", start)
-          .lt("done_at", end);
-
-        setCompletedCount(count || 0);
-      } else {
-        console.error("Usuário não encontrado na tabela users.");
-      }
-    };
-
-    fetchUserUUID();
-  }, [isLoaded, user?.id]);
 
   if (!isLoaded) {
     return (
@@ -74,7 +52,7 @@ export default function DashboardContent() {
   const plano = isPremium ? "PRO" : "Gratuito";
 
   return (
-    <main className="p-6 max-w-4xl mx-auto">
+    <main className="p-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-2">Olá, {user?.firstName} 👋</h1>
       <p className="text-muted-foreground mb-2">
         Seu plano atual: <strong>{plano}</strong>

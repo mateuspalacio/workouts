@@ -5,9 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
 type Template = {
   id: string;
@@ -17,118 +15,114 @@ type Template = {
   notes?: string;
 };
 
-export default function TemplateManagerPage() {
+export default function AdminTemplatesPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
-  const [form, setForm] = useState<Omit<Template, "id">>({
+  const [form, setForm] = useState({
     name: "",
     sets_reps: "",
     video_url: "",
     notes: "",
   });
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<string | null>(null);
 
-  const { user, isLoaded } = useUser();
-  const router = useRouter();
-  const isAdmin = user?.emailAddresses[0]?.emailAddress === "mateuspalacio@gmail.com";
-
-  useEffect(() => {
-    if (isLoaded && !isAdmin) router.push("/");
-  }, [isLoaded, isAdmin]);
+  const fetchTemplates = async () => {
+    const res = await fetch("/api/templates");
+    const data = await res.json();
+    setTemplates(data || []);
+  };
 
   useEffect(() => {
-    const loadTemplates = async () => {
-      const { data } = await supabase.from("exercise_templates").select("*").order("name");
-      if (data) setTemplates(data);
-    };
-    loadTemplates();
+    fetchTemplates();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setStatus(null);
+  const handleSubmit = async () => {
+    const res = await fetch("/api/templates", {
+      method: "POST",
+      body: JSON.stringify(form),
+      headers: { "Content-Type": "application/json" },
+    });
 
-    const { data, error } = await supabase
-      .from("exercise_templates")
-      .insert(form)
-      .select()
-      .single();
-
-    if (error) {
-      setStatus("Erro ao salvar template.");
-      setLoading(false);
-      return;
+    if (res.ok) {
+      setForm({ name: "", sets_reps: "", video_url: "", notes: "" });
+      fetchTemplates();
     }
+  };
 
-    setTemplates((prev) => [...prev, data]);
-    setForm({ name: "", sets_reps: "", video_url: "", notes: "" });
-    setStatus("Template criado com sucesso!");
-    setLoading(false);
+  const handleDelete = async (id: string) => {
+    await fetch(`/api/templates/${id}`, { method: "DELETE" });
+    fetchTemplates();
   };
 
   return (
-    <main className="max-w-xl p-6 mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Criar novo template de exercício</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4 mb-10">
-        <div>
-          <Label htmlFor="name">Nome do exercício</Label>
-          <Input
-            id="name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="sets_reps">Séries e repetições</Label>
-          <Input
-            id="sets_reps"
-            value={form.sets_reps}
-            onChange={(e) => setForm({ ...form, sets_reps: e.target.value })}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="video_url">URL do vídeo</Label>
-          <Input
-            id="video_url"
-            value={form.video_url}
-            onChange={(e) => setForm({ ...form, video_url: e.target.value })}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="notes">Notas</Label>
-          <Textarea
-            id="notes"
-            value={form.notes}
-            onChange={(e) => setForm({ ...form, notes: e.target.value })}
-          />
-        </div>
-
-        <Button type="submit" disabled={loading}>
-          {loading ? "Salvando..." : "Salvar template"}
-        </Button>
-
-        {status && <p className="text-sm mt-2">{status}</p>}
-      </form>
-
-      {/* List of Templates */}
+    <div className="max-w-3xl mx-auto py-10 space-y-10">
       <section>
-        <h2 className="text-lg font-semibold mb-4">Templates existentes</h2>
-        <ul className="space-y-3">
+        <h1 className="text-2xl font-bold mb-4">Templates de Exercício</h1>
+        <div className="grid gap-4">
           {templates.map((t) => (
-            <li key={t.id} className="border p-4 rounded">
-              <p className="font-semibold">{t.name}</p>
-              <p className="text-sm text-muted-foreground">{t.sets_reps}</p>
-              <p className="text-sm italic">{t.video_url}</p>
-              {t.notes && <p className="text-sm">{t.notes}</p>}
-            </li>
+            <div
+              key={t.id}
+              className="border rounded p-4 relative bg-background"
+            >
+              <h2 className="font-semibold">{t.name}</h2>
+              <p className="text-sm text-muted-foreground">
+                {t.sets_reps} —{" "}
+                <a
+                  href={t.video_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  ver vídeo
+                </a>
+              </p>
+              {t.notes && (
+                <p className="text-sm text-muted-foreground italic">{t.notes}</p>
+              )}
+              <button
+                onClick={() => handleDelete(t.id)}
+                className="absolute top-2 right-2 text-red-500"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
-    </main>
+
+      <section>
+        <h2 className="text-xl font-semibold mb-2">Novo Template</h2>
+        <div className="space-y-4">
+          <div>
+            <Label>Nome</Label>
+            <Input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Séries e repetições</Label>
+            <Input
+              value={form.sets_reps}
+              onChange={(e) => setForm({ ...form, sets_reps: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Vídeo</Label>
+            <Input
+              value={form.video_url}
+              onChange={(e) => setForm({ ...form, video_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Notas (opcional)</Label>
+            <Textarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            />
+          </div>
+
+          <Button onClick={handleSubmit}>Salvar template</Button>
+        </div>
+      </section>
+    </div>
   );
 }

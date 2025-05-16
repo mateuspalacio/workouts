@@ -60,6 +60,10 @@ export default function Benefits() {
               <Star className="w-4 h-4 text-yellow-500" />
               Mais variedade, mais resultado
             </li>
+            <li className="flex items-center gap-2">
+              <Star className="w-4 h-4 text-yellow-500" />
+              Use todas as futuras funcionalidades no pré-lançamento!
+            </li>
           </ul>
           <Link href="/precos">
             <Button className="w-full mt-6">Assinar agora</Button>

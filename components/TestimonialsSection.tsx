@@ -13,9 +13,9 @@ export default function TestimonialsSection() {
               image: "/bia.jpeg",
             },
             {
-              name: "Paulo",
+              name: "Daniel",
               text: "Voltei a treinar depois de anos parado. Agora faço todo mês e adoro.",
-              image: "/paulo.jpeg",
+              image: "/daniel.jpeg",
             },
             {
               name: "Teixeira",
