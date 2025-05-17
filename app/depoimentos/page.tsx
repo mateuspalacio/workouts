@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card"
 import Image from "next/image"
 
 export const metadata: Metadata = {
-  title: "Testemunhos | Treinos",
+  title: "Depoimentos | Treinos",
   description: "Histórias reais de superação com treinos do Alexandre.",
 }
 

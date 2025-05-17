@@ -68,16 +68,14 @@ const [open, setOpen] = useState(false);
   };
 
   return (
-    <nav className="bg-blue px-4 py-2 sticky top-0 z-10">
+    <nav className="bg-muted rounded-lg px-4 py-2 sticky top-0 z-10">
        {/* Mobile: Logo + Sidebar Trigger */}
-  <div className="sm:hidden fixed top-0 left-0 right-0 z-40 px-4 py-2 flex items-center justify-between">
-    
-
+  <div className="sm:hidden fixed top-0 left-0 right-0 z-40 px-4 py-2 flex items-center bg-muted justify-between rounded-lg">
     <Sheet open={open} onOpenChange={setOpen}>
        
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Menu className="w-5 h-5" />
+        <Button variant="ghost" size="lg">
+          <Menu className="w-16 h-16 text-white-600 animate-pulse" />
         </Button>
       </SheetTrigger>
 
@@ -159,7 +157,7 @@ const [open, setOpen] = useState(false);
               </Button>
             ) : (
               <Link href="/precos">
-                <Button variant="outline" size="sm">Ver Planos</Button>
+                <Button variant="outline" className='animate-pulse' size="sm">Ver Planos</Button>
               </Link>
             )}
             <UserButton afterSignOutUrl="/" />
@@ -167,7 +165,7 @@ const [open, setOpen] = useState(false);
 
           <SignedOut>
             <Link href="/precos">
-              <Button variant="outline" size="sm">Ver Planos</Button>
+              <Button variant="outline" className='animate-pulse' size="sm">Ver Planos</Button>
             </Link>
             <SignInButton mode="modal">
               <Button variant="outline" size="sm">Entrar</Button>

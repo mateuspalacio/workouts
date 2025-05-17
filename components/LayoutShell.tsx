@@ -12,7 +12,7 @@ export default function LayoutShell({ children }: { children: React.ReactNode })
       <Sidebar />
       <div className={`flex flex-col flex-1 transition-all ${collapsed ? 'sm:ml-16' : 'sm:ml-64'}`}>
         <Navbar/>
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4 pt-12">{children}</main>
         <Footer/>
       </div>
     </div>
