@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 export default function AboutAlexandre() {
   return (
@@ -28,6 +30,12 @@ export default function AboutAlexandre() {
           alt="Alexandre Melo"
           className="rounded-xl shadow-xl object-cover w-full max-h-[400px]"
         />
+            <div className="text-center">
+            <Link href={'/depoimentos'}>
+        <Button variant="secondary" size="lg" className="text-lg mt-2">
+          Ver Depoimentos
+        </Button>
+        </Link></div>
         </div>
         <div className="space-y-4">
           <h2 className="text-2xl font-bold">Sobre o Alexandre</h2>

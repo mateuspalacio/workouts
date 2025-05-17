@@ -1,4 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
+import { Plus } from "lucide-react";
 
 export default function TestimonialsSection() {
   return (
@@ -45,6 +48,12 @@ export default function TestimonialsSection() {
             </div>
           ))}
         </div>
+         <div className="text-center">
+            <Link href={'/depoimentos'}>
+        <Button variant="secondary" size="lg" className="text-lg mt-2">
+          Ver <Plus> </Plus>Depoimentos
+        </Button>
+        </Link></div>
       </div>
     </section>
   );

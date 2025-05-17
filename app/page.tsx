@@ -8,6 +8,8 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import { validateUserSubscription } from "@/lib/checkSubscription";
 import { getOrCreateUser } from "@/lib/getOrCreateUser";
 import { currentUser } from "@clerk/nextjs/server";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function HomePage() {
   const user = await currentUser();
@@ -52,6 +54,12 @@ export default async function HomePage() {
               <li>Experiência em academias, CrossFit, reabilitação e alto rendimento</li>
               <li>Treinos práticos, diretos e com execução segura</li>
             </ul>
+            <div className="text-center">
+            <Link href={'/depoimentos'}>
+        <Button variant="secondary" size="lg" className="text-lg mt-2">
+          Ver Depoimentos
+        </Button>
+        </Link></div>
           </div>
         </div>
       </section>
