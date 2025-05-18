@@ -4,8 +4,40 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle, Clock4, Dumbbell, Star } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
 
 export default function Benefits() {
+  
+  const { user } = useUser();
+
+    const [isPremium, setIsPremium] = useState(false);
+    
+      useEffect(() => {
+        const checkPremiumStatus = async () => {
+          if (!user?.id) return;
+    
+          try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users`, {
+              method: "POST",
+              body: JSON.stringify({ clerkId: user.id }),
+              headers: { "Content-Type": "application/json" },
+            });
+    
+            if (!res.ok) {
+              throw new Error("Failed to fetch user data");
+            }
+    
+            const json = await res.json();
+            setIsPremium(json?.ispremium ?? false);
+          } catch (err) {
+            console.error("Error checking premium status:", err);
+          }
+        };
+    
+        checkPremiumStatus();
+      }, [user]);
+    
   return (
     <motion.section
       className="space-y-6 text-center"
@@ -65,9 +97,14 @@ export default function Benefits() {
               Use todas as futuras funcionalidades no pré-lançamento!
             </li>
           </ul>
-          <Link href="/precos">
+          {!isPremium ? (<Link href="/precos">
             <Button className="w-full mt-6">Assinar agora</Button>
-          </Link>
+          </Link>):(<Link href={'/dashboard'}>
+          <Button size="lg" className="w-full mt-6">
+            Ir para o Painel de Treinos
+          </Button>
+          </Link>)}
+          
         </div>
       </div>
     </motion.section>
